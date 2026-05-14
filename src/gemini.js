@@ -18,7 +18,7 @@ export async function askAI(question) {
 
             body: JSON.stringify({
 
-                model: "openai/gpt-3.5-turbo",
+                model: "meta-llama/llama-3-8b-instruct:free",
 
                 messages: [
 
