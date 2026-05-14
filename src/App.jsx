@@ -76,7 +76,7 @@ function App() {
 
       console.log(error)
 
-      setAnswer("Error connecting to AI")
+      setAnswer(String(error))
 
     }
 
