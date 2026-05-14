@@ -1,59 +1,30 @@
 const API_KEY =
-    import.meta.env.VITE_OPENROUTER_API_KEY
+    import.meta.env.VITE_OPENROUTER_API_KEY;
 
-export async function askAI(question) {
-
+export async function askAI(prompt) {
     try {
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${API_KEY}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                model: "mistralai/mistral-7b-instruct:free",
+                messages: [{
+                    role: "user",
+                    content: prompt,
+                }, ],
+            }),
+        });
 
-        const response = await fetch(
-            "https://openrouter.ai/api/v1/chat/completions", {
+        const data = await response.json();
 
-                method: "POST",
-
-                headers: {
-
-                    Authorization: `Bearer ${API_KEY}`,
-
-                    "Content-Type": "application/json"
-
-                },
-
-                body: JSON.stringify({
-
-                    model: "openai/gpt-3.5-turbo",
-
-                    messages: [
-
-                        {
-                            role: "user",
-                            content: question
-                        }
-
-                    ]
-
-                })
-
-            }
-        )
-
-        const data = await response.json()
-
-        console.log(data)
-
-        if (!response.ok) {
-
-            return JSON.stringify(data)
-
-        }
-
-        return data.choices[0].message.content
-
+        return (
+            data.choices ? .[0] ? .message ? .content ||
+            JSON.stringify(data)
+        );
     } catch (error) {
-
-        console.log(error)
-
-        return error.message
-
+        return "Error connecting to AI";
     }
-
 }
