@@ -3,39 +3,57 @@ const API_KEY =
 
 export async function askAI(question) {
 
-    const response = await fetch(
-        "https://openrouter.ai/api/v1/chat/completions", {
+    try {
 
-            method: "POST",
+        const response = await fetch(
+            "https://openrouter.ai/api/v1/chat/completions", {
 
-            headers: {
+                method: "POST",
 
-                Authorization: `Bearer ${API_KEY}`,
+                headers: {
 
-                "Content-Type": "application/json"
+                    Authorization: `Bearer ${API_KEY}`,
 
-            },
+                    "Content-Type": "application/json"
 
-            body: JSON.stringify({
+                },
 
-                model: "meta-llama/llama-3-8b-instruct:free",
+                body: JSON.stringify({
 
-                messages: [
+                    model: "meta-llama/llama-3-8b-instruct:free",
 
-                    {
-                        role: "user",
-                        content: question
-                    }
+                    messages: [
 
-                ]
+                        {
+                            role: "user",
+                            content: question
+                        }
 
-            })
+                    ]
+
+                })
+
+            }
+        )
+
+        const data = await response.json()
+
+        console.log(data)
+
+        if (!response.ok) {
+
+            return JSON.stringify(data)
 
         }
-    )
 
-    const data = await response.json()
+        return data.choices[0].message.content
 
-    return data.choices[0].message.content
+    } catch (error) {
+
+        console.log(error)
+
+        return error.message
+
+    }
 
 }
